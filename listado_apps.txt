@@ -1,11 +1,1 @@
-http://curso-gae-mmog40x.appspot.com
-http://curso-gae-jeao76k.appspot.com
-http://curso-gae-jnmt26t.appspot.com
-http://curso-gae-iamr58a.appspot.com
-http://curso-gae-maes23t.appspot.com
-http://curso-gae-doel88f.appspot.com
-http://curso-gae-dani31y.appspot.com
-http://curso-gae-ahr06f.appspot.com
-http://curso-gae-ebdb34k.appspot.com
-http://curso-gae-salk18m.appspot.com
-http://curso-gae-ppgg93c.appspot.com
+http://localhost:8080

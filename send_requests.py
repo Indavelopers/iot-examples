@@ -5,6 +5,7 @@ import random
 import requests
 import json
 import time
+import logging
 
 
 def parse_url():
@@ -15,8 +16,8 @@ def parse_url():
 
 
 METODOS = ['get', 'post', 'put', 'delete']
-RECURSOS = [str(round(random.random() * 100000)) for _ in xrange(1000)]
-TIEMPO_DORMIR = 10
+RECURSOS = [str(int(round(random.random() * 100000))) for _ in xrange(1000)]
+TIEMPO_DORMIR = 1
 
 
 def main():
@@ -31,9 +32,9 @@ def main():
 			if metodo == 'get':
 				r = requests.get(u + recurso)
 			elif metodo == 'post':
-				r = requests.post(u + recurso, data=json.dumps({'data': round(random.random() * 100)}))
+				r = requests.post(u + recurso, data=json.dumps({'data': str(int(round(random.random() * 100)))}))
 			elif metodo == 'put':
-				r = requests.put(u + recurso, data=json.dumps({'data': round(random.random() * 100)}))
+				r = requests.put(u + recurso, data=json.dumps({'data': str(int(round(random.random() * 100)))}))
 			elif metodo == 'delete':
 				r = requests.delete(u + recurso)
 

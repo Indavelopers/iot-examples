@@ -1,5 +1,7 @@
-# send_requests.py
-# Send request to GAE apps
+#!/usr/bin/env python
+
+""" send_requests.py: Send random requests to GAE apps"""
+
 
 import random
 import requests
@@ -9,52 +11,50 @@ import logging
 
 
 def parse_url():
-	with open('listado_apps.txt', 'r') as f:
-		urls = f.read().split('\n')
+    with open('listado_apps.txt', 'r') as f:
+	urls = f.read().split('\n')
 
-	return [u + '/api/' for u in urls]
+    return [u + '/api/' for u in urls]
 
 
 METODOS = ['get', 'post', 'put', 'delete']
-RECURSOS = [str(int(round(random.random() * 100000))) for _ in xrange(1000)]
-TIEMPO_DORMIR = 1
+RECURSOS = [str(random.randint(0,100000)) for _ in range(100)]
+TIEMPO_DORMIR = 2
 
 
 def main():
-	while True:
-		urls = parse_url()
+    while True:
+        urls = parse_url()
+	metodo = random.choice(METODOS)
+	recurso = random.choice(RECURSOS)
 
-		metodo = random.choice(METODOS)
+	for u in urls:
+		if metodo == 'get':
+		    r = requests.get(u + recurso)
+		elif metodo == 'post':
+                    r = requests.post(u + recurso, data=json.dumps({'data': str(random.randint(0,1000))}))
+		elif metodo == 'put':
+		    r = requests.put(u + recurso, data=json.dumps({'data': str(random.randint(0,1000))}))
+                elif metodo == 'delete':
+                    r = requests.delete(u + recurso)
 
-		recurso = random.choice(RECURSOS)
+                try:
+                    res_json = r.json()
+                except ValueError:
+                    res_json = False
 
-		for u in urls:
-			if metodo == 'get':
-				r = requests.get(u + recurso)
-			elif metodo == 'post':
-				r = requests.post(u + recurso, data=json.dumps({'data': str(int(round(random.random() * 100)))}))
-			elif metodo == 'put':
-				r = requests.put(u + recurso, data=json.dumps({'data': str(int(round(random.random() * 100)))}))
-			elif metodo == 'delete':
-				r = requests.delete(u + recurso)
+                res = 'URL: {}\tRecurso: {}\tStatus: {}\tMetodo: {}\tRespuesta: {}'.format(r.url,
+                                                                                           recurso,
+                                                                                           r.status_code,
+                                                                                           metodo,
+                                                                                           r.text.encode('utf-8')[:60])
 
-			try:
-				res_json = r.json()
-			except ValueError:
-				res_json = False
+                if res_json:
+                    res += '\tJSON: {}'.format(res_json)
 
-			res = 'URL: {}\tRecurso: {}\tStatus: {}\tMetodo: {}\tRespuesta: {}'.format(r.url,
-			                                                                           recurso,
-			                                                                           r.status_code,
-			                                                                           metodo,
-			                                                                           r.text.encode('utf-8')[:60])
+                print(res)
 
-			if res_json:
-				res += '\tJSON: {}'.format(res_json)
-
-			print res
-
-		time.sleep(TIEMPO_DORMIR)
+                time.sleep(TIEMPO_DORMIR)
 
 
 if __name__ == '__main__':
